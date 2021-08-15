@@ -441,6 +441,11 @@ class Games extends Component {
 }
 
 const Submit = ({author}) => {
+  useEffect(() => {
+    if (!author) {
+      error("Please sign in or register.")
+    }
+  })
   
   const [formState, setFormState] = useState([]);
 
