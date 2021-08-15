@@ -157,7 +157,9 @@ class App extends Component {
           loggedIn: false,
           showSignIn: false,
           showSubmit: false,
-          onHome: true
+          onHome: true,
+          user: null,
+          username: null
         })
       })
     }
@@ -419,7 +421,7 @@ const Submit = ({author}) => {
 
   function validate() {
     if (!author) {
-      error("Please login or register.")
+      error("Please sign in or register.")
       return false;
     }
     if (!formState) {
