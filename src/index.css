@@ -19,8 +19,13 @@ body {
   flex: 1 0 auto;
 }
 .footer {
-  flex-shrink: 0;
+  display: flex;
+  height: 5%;
+  justify-content: center;
+  min-height: 45px;
   padding-top: 20px;
+  background-color: #54A3A7;
+  font-size: 2rem;
 }
 a {
   color: white;
@@ -45,17 +50,23 @@ hr {
   color: #dc9a6b;
 }
 .nav {
-  align-items: center;
+  display: flex;
   background-color: #54A3A7;
+  min-height: 70px;
+  height: 8%;
+  padding: 15px 15px 0px 4%;
 }
 .title {
+  width: 70%;
+  padding-top: 5px;
   color: white;
-  vertical-align: middle;
-  width: 61%;
+  font-size: 2rem;
+  min-width: 225px;
 }
 .links {
   font-size: x-large;
-  width: 28%;
+  width: 20%;
+  padding-top: 10px;
 }
 .link {
   color: white;
@@ -240,10 +251,37 @@ hr {
 .submit {
   padding-left: 5%;
   padding-top: 1%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 30%;
 }
 .flex {
   display: flex;
 }
 .error {
   color: red;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.games {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.submit-button {
+  width: 90%;
+  margin-top: 10px;
+  margin-left: 5%;
+  height: 50px;
+  font-size: 1.5rem;
+  background-color: rgb(32, 163, 49);
+  border: none;
+  color: white;
+}
+.game-input {
+  width: 98%;
 }

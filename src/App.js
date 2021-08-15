@@ -12,23 +12,6 @@ import { DateUtils } from '@aws-amplify/core';
 import { AWSAppSyncProvider } from '@aws-amplify/pubsub';
 Amplify.configure(aws_exports);
 
-// const myAppConfig = {
-//   'aws_appsync_graphqlEndpoint': 'https://xxxxxx.appsync-api.us-east-1.amazonaws.com/graphql',
-//   'aws_appsync_region': 'us-east-2',
-//   'aws_appsync_authenticationType': 'API_KEY',
-//   'aws_appsync_apiKey': 'da2-xxxxxxxxxxxxxxxxxxxxxxxxxx',
-  
-
-//   "aws_project_region": "us-east-2",
-//   "aws_cognito_identity_pool_id": "us-east-2:55b16092-9eeb-4ad4-be8e-cfb09c810086",
-//   "aws_cognito_region": "us-east-2",
-//   "aws_user_pools_id": "us-east-2_ZlDegqCR2",
-//   "aws_user_pools_web_client_id": "2oq0varh3cmq91ednj101m6fs9",
-//   "oauth": {}
-// }
-
-// Amplify.configure(myAppConfig);
-
 // https://docs.amplify.aws/start/getting-started/data-model/q/integration/react#deploying-the-api
 // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
 
@@ -168,7 +151,7 @@ class App extends Component {
   render() {
     if (this.state.showSignIn) {
       return (
-        <div>
+      <div className="wrapper">
         <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} />
         <AmplifyAuthenticator>
           <AmplifySignIn></AmplifySignIn>
@@ -179,7 +162,7 @@ class App extends Component {
     }
     if (this.state.showSubmit) {
       return (
-        <div>
+      <div className="wrapper">
         <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome}  />
         <Submit author={this.state.username}/>
         <Footer />
@@ -187,7 +170,7 @@ class App extends Component {
       )
     }
     return(
-    <div>
+    <div className="wrapper">
       <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome}  />
       <Content Games={this.state.games}/>
       <Footer />
@@ -243,84 +226,56 @@ class Navigation extends Component {
     if (this.props.loggedIn) {
       if (this.props.onHome) {
         return (
-          <div className="content">
-        <div id="nav" className="flex-container center nav">
-          <div id="title" className="title flex-container">
-            <div>
-              <img className="logo" src="logosmall.png" alt=""></img>
-            </div>
-            <div>
-              <h1>Carrier Commander</h1>
-            </div>
+        <div id="nav" className="nav">
+          <div id="title" className="title">
+              Carrier Commander
           </div>
-          <div id="links" className="links flex-container">
+          <div id="links" className="links">
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
-            <a className="link" onClick={this.handleLogout}>{this.props.username}, Sign Out</a>
+            <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
           </div>
         </div>
-      </div>
         )
       }
       return (
-        <div className="content">
-      <div id="nav" className="flex-container center nav">
-        <div id="title" className="title flex-container">
-          <div>
-            <img className="logo" src="logosmall.png" alt=""></img>
+      <div id="nav" className="nav">
+        <div id="title" className="title">
+              Carrier Commander
           </div>
-          <div>
-            <h1>Carrier Commander</h1>
-          </div>
-        </div>
-        <div id="links" className="links flex-container">
+        <div id="links" className="links">
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
-          <a className="link" onClick={this.handleLogout}>{this.props.username}, Sign Out</a>
+          <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
         </div>
       </div>
-    </div>
       )
     }
     if (this.props.onHome) {
       return (
-        <div className="content">
-        <div id="nav" className="flex-container center nav">
-          <div id="title" className="title flex-container">
-            <div>
-              <img className="logo" src="logosmall.png" alt=""></img>
-            </div>
-            <div>
-              <h1>Carrier Commander</h1>
-            </div>
+        <div id="nav" className="nav">
+          <div id="title" className="title">
+              Carrier Commander
           </div>
-          <div id="links" className="links flex-container">
+          <div id="links" className="links">
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
-            <a className="link" onClick={this.handleLogin}>Sign In</a>
+            <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
           </div>
         </div>
-      </div>
       )
     }
     return (
-      <div className="content">
-      <div id="nav" className="flex-container center nav">
-        <div id="title" className="title flex-container">
-          <div>
-            <img className="logo" src="logosmall.png" alt=""></img>
+      <div id="nav" className="nav">
+        <div id="title" className="title">
+              Carrier Commander
           </div>
-          <div>
-            <h1>Carrier Commander</h1>
-          </div>
-        </div>
-        <div id="links" className="links flex-container">
+        <div id="links" className="links">
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
-          <a className="link" onClick={this.handleLogin}>Sign In</a>
+          <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
         </div>
       </div>
-    </div>
     )
   }
 }
@@ -356,7 +311,7 @@ class Games extends Component {
 
     if (this.props.Games) {
       return (
-        <div className="flex-container column">
+        <div className="games">
           <GamesHeader />
           <div className="game game-header">
             <div className="game-title">
@@ -381,7 +336,7 @@ class Games extends Component {
     }
     else {
       return (
-        <div className="flex-container column">
+        <div className="games">
           <GamesHeader />
           <div className="game game-header">
             <div className="game-title">
@@ -458,7 +413,7 @@ const Submit = ({author}) => {
       formState.id = author + Math.round((new Date()).getTime() / 1000);
       API.graphql(graphqlOperation(createCarriedCommandGames, { input: formState}))
       .then((result) => {
-        console.log(result);
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error);
@@ -470,24 +425,15 @@ const Submit = ({author}) => {
   return (
     <div className="submit">
       <label for="title">Title</label> <br />
-      <input type="text" id="title" className="game-input" onChange={event => setInput('title', event.target.value)}></input>
-      <br />
-      <br />
+      <input className="game-input" type="text" id="title" className="game-input" onChange={event => setInput('title', event.target.value)}></input>
       <label for="title">Invite Code</label> <br />
-      <input type="text" id="code" className="game-input" onChange={event => setInput('code', event.target.value)}></input>
-      <br />
-      <br />
+      <input className="game-input" type="text" id="code" className="game-input" onChange={event => setInput('code', event.target.value)}></input>
       <label for="title">Password</label> <br />
-      <input type="text" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
-      <br />
-      <br />
+      <input className="game-input" type="text" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
       <label for="title">Players</label> <br />
-      <input type="number" max="16" min="2" value="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
-      <br />
-      <br />
+      <input className="game-input" type="number" max="16" min="2" value="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
       <span id="error" className="error"></span>
-      <br />
-      <button onClick={addGame}>Create Game</button>
+      <button className="submit-button" onClick={addGame}>Create Game</button>
     </div>
   )
 }
@@ -528,18 +474,23 @@ class Game extends Component {
   }
 }
 
+class About extends Component {
+  render() {
+    return(
+      <div>
+        <h1>Carrier Commander</h1>
+        <p><strong>This is a work in progress.</strong></p>
+      </div>
+    )
+  }
+}
+
 class Footer extends Component {
   render() {
     return (
       <footer className="footer">
-  <div className="flex-container center nav">
-    <div className="flex-container center">
-      <div className="discord">
-        Not Affiliated With Carrier Command 2
-      </div>
-    </div>
-  </div>
-</footer>
+        Not Associated With Carrier Command 2
+      </footer>
     )
   }
 }
