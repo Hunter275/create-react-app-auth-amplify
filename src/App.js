@@ -10,7 +10,22 @@ import { listCarriedCommandGames } from './graphql/queries'
 import { createCarriedCommandGames } from './graphql/mutations'
 import { DateUtils } from '@aws-amplify/core';
 import { AWSAppSyncProvider } from '@aws-amplify/pubsub';
-Amplify.configure(aws_exports);
+//mplify.configure(aws_exports);
+
+const config = {
+  "aws_project_region": "us-east-2",
+  "aws_cognito_identity_pool_id": "us-east-2:55b16092-9eeb-4ad4-be8e-cfb09c810086",
+  "aws_cognito_region": "us-east-2",
+  "aws_user_pools_id": "us-east-2_ZlDegqCR2",
+  "aws_user_pools_web_client_id": "2oq0varh3cmq91ednj101m6fs9",
+  "oauth": {},
+  "aws_appsync_graphqlEndpoint": "https://irhgcpajqbfaxkih2plpn3guoi.appsync-api.us-east-2.amazonaws.com/graphql",
+  "aws_appsync_region": "us-east-2",
+  "aws_appsync_authenticationType": "API_KEY",
+  "aws_appsync_apiKey": "da2-j22lveytnjemdpomzvmkwhvoqa"
+};
+
+Amplify.configure(config);
 
 // https://docs.amplify.aws/start/getting-started/data-model/q/integration/react#deploying-the-api
 // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
@@ -156,7 +171,7 @@ class App extends Component {
         <AmplifyAuthenticator>
           <AmplifySignIn></AmplifySignIn>
         </AmplifyAuthenticator>
-        <Footer />
+        <Footer /> 
       </div>
       )
     }
