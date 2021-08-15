@@ -4,28 +4,34 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import aws_exports from './aws-exports';
 import { AmplifyAuthContainer, AmplifyAuthenticator, AmplifySignIn } from "@aws-amplify/ui-react";
 import appSyncConfig from "./aws-exports";
-import { Amplify, Auth, Hub, Logger } from 'aws-amplify';
+import { API, graphqlOperation, Amplify, Auth, Hub, Logger } from 'aws-amplify';
 import { useEffect, useState } from 'react'
-import { API, graphqlOperation } from 'aws-amplify'
-import { listCcGames } from './graphql/queries'
+import { listCarriedCommandGames } from './graphql/queries'
+import { createCarriedCommandGames } from './graphql/mutations'
 import { DateUtils } from '@aws-amplify/core';
 import { AWSAppSyncProvider } from '@aws-amplify/pubsub';
 Amplify.configure(aws_exports);
 
-const logger = new Logger("CCLogger");
+// const myAppConfig = {
+//   'aws_appsync_graphqlEndpoint': 'https://xxxxxx.appsync-api.us-east-1.amazonaws.com/graphql',
+//   'aws_appsync_region': 'us-east-2',
+//   'aws_appsync_authenticationType': 'API_KEY',
+//   'aws_appsync_apiKey': 'da2-xxxxxxxxxxxxxxxxxxxxxxxxxx',
+  
+
+//   "aws_project_region": "us-east-2",
+//   "aws_cognito_identity_pool_id": "us-east-2:55b16092-9eeb-4ad4-be8e-cfb09c810086",
+//   "aws_cognito_region": "us-east-2",
+//   "aws_user_pools_id": "us-east-2_ZlDegqCR2",
+//   "aws_user_pools_web_client_id": "2oq0varh3cmq91ednj101m6fs9",
+//   "oauth": {}
+// }
+
+// Amplify.configure(myAppConfig);
 
 // https://docs.amplify.aws/start/getting-started/data-model/q/integration/react#deploying-the-api
 // https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
 
-const initialState = {
-  title: '',
-  players: 0,
-  invite: '',
-  password: '',
-  reports: 0,
-  creator: '',
-  created: null
-}
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +40,7 @@ class App extends Component {
       loggedIn: false,
       showSignIn: false,
       showSubmit: false,
-      username: "Test",
+      username: null,
       user: null,
       onHome: true,
       games: null
@@ -64,23 +70,15 @@ class App extends Component {
 
     Hub.listen('auth', listener);
 
-    // await API.graphql(graphqlOperation(listCcGames))
-    //   .then((result) => {
-    //     alert(result);
-    //   })
-
-
-    API.graphql(graphqlOperation(listCcGames))
+    API.graphql(graphqlOperation(listCarriedCommandGames))
     .then((result) => {
       this.setState({
-        games: result.data.listCCGames.items
+        games: result.data.listCarriedCommandGames.items
       })
     })
     .catch((error) => {
       console.log(error);
     })
-
-    //API.graphql(graphqlOperation(createCCGames))
 
     Auth.currentSession()
     .then((result) => {
@@ -119,6 +117,16 @@ class App extends Component {
         showSignIn: false,
         showSubmit: false,
         onHome: true
+      })
+
+      API.graphql(graphqlOperation(listCarriedCommandGames))
+      .then((result) => {
+        this.setState({
+          games: result.data.listCarriedCommandGames.items
+        })
+      })
+      .catch((error) => {
+        console.log(error);
       })
     }
 
@@ -171,7 +179,7 @@ class App extends Component {
       return (
         <div>
         <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome}  />
-        <Submit />
+        <Submit author={this.state.username}/>
         <Footer />
       </div>
       )
@@ -396,61 +404,99 @@ class Games extends Component {
   }
 }
 
-const Submit = () => {
+const Submit = ({author}) => {
+  
   const [formState, setFormState] = useState([]);
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value})
   }
 
-  async function addGame() {
-    try {
-      if (!formState.title || !formState.invite || !formState.password) 
-      {
-        return;
-      }
-      if (!formState.players)
-      {
+  function error(message)
+  {
+    document.getElementById("error").innerText = message;
+  }
+
+  function validate() {
+    if (!author) {
+      error("Please login or register.")
+      return false;
+    }
+    if (!formState) {
+      return false;
+    }
+    if (!formState.title)
+    {
+      error("Please input a title.")
+      return false;
+    }
+    if (!formState.code)
+    {
+      error("Please input a code.")
+      return false;
+    }
+    if (!formState.password)
+    {
+      error("Please input a password.")
+      return false;
+    }
+    return true;
+  }
+
+  function addGame() {
+    if (validate())
+    {
+      if (!formState.players) {
         formState.players = 2;
       }
-      formState.created = new Date().toISOString();
-      formState.creator = "Test";
+      var created = new Date;
+      formState.created = created.toISOString();
+      formState.author = author;
       formState.reports = 0;
-      const game = { ...formState };
-      //setGames([...formState]);
-      setFormState(initialState);
-      // await API.graphql(graphqlOperation(createGame, {input: game}))
-      // .catch((error) => {
-      //   console.log(error);
-      // })
-    } catch (err) {
-      console.log("error creating game: " + err);
+      formState.id = author + Math.round((new Date()).getTime() / 1000);
+      API.graphql(graphqlOperation(createCarriedCommandGames, { input: formState}))
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+        error("Error when posting game, are you logged in?");
+      })
     }
   }
 
   return (
     <div className="submit">
       <label for="title">Title</label> <br />
-      <input type="text" name="title" id="title" className="game-input" onChange={event => setInput('title', event.target.value)}></input>
+      <input type="text" id="title" className="game-input" onChange={event => setInput('title', event.target.value)}></input>
       <br />
       <br />
       <label for="title">Invite Code</label> <br />
-      <input type="text" name="title" id="title" className="game-input" onChange={event => setInput('invite', event.target.value)}></input>
+      <input type="text" id="code" className="game-input" onChange={event => setInput('code', event.target.value)}></input>
       <br />
       <br />
       <label for="title">Password</label> <br />
-      <input type="text" name="password" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
+      <input type="text" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
       <br />
       <br />
       <label for="title">Players</label> <br />
-      <input type="number" max="16" min="2" value="2" name="title" id="title" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
+      <input type="number" max="16" min="2" value="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
       <br />
       <br />
-      <div className="white">Games are deleted after 3 hours.</div>
+      <span id="error" className="error"></span>
       <br />
       <button onClick={addGame}>Create Game</button>
     </div>
   )
+}
+
+class ErrorMessage extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <span className="error">{this.props.error}</span>
+  }
 }
 
 class Game extends Component {
@@ -496,5 +542,5 @@ class Footer extends Component {
   }
 }
 
-export default withAuthenticator(App);
-//export default(App);
+//export default withAuthenticator(App);
+export default(App);
