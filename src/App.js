@@ -38,6 +38,7 @@ class App extends Component {
       loggedIn: false,
       showSignIn: false,
       showSubmit: false,
+      showAbout: false,
       username: null,
       user: null,
       onHome: true,
@@ -58,6 +59,7 @@ class App extends Component {
             loggedIn: true,
             showSignIn: false,
             showSubmit: false,
+            showAbout: false,
             user: data.payload.data,
             username: data.payload.data.username,
           })
@@ -114,6 +116,7 @@ class App extends Component {
       this.setState({
         showSignIn: false,
         showSubmit: false,
+        showAbout: false,
         onHome: true
       })
 
@@ -133,6 +136,17 @@ class App extends Component {
       this.setState({
         showSignIn: false,
         showSubmit: true,
+        showAbout: false,
+        onHome: false
+      })
+    }
+
+    if (nav == "about")
+    {
+      this.setState({
+        showSignIn: false,
+        showSubmit: false,
+        showAbout: true,
         onHome: false
       })
     }
@@ -143,6 +157,7 @@ class App extends Component {
         loggedIn: false,
         showSignIn: true,
         showSubmit: false,
+        showAbout: false,
         onHome: true
       })
     }
@@ -155,6 +170,7 @@ class App extends Component {
           loggedIn: false,
           showSignIn: false,
           showSubmit: false,
+          showAbout: false,
           onHome: true,
           user: null,
           username: null
@@ -167,7 +183,7 @@ class App extends Component {
     if (this.state.showSignIn) {
       return (
       <div className="wrapper">
-        <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} />
+        <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} onAbout={this.state.showAbout} />
         <AmplifyAuthenticator>
           <AmplifySignIn></AmplifySignIn>
         </AmplifyAuthenticator>
@@ -178,15 +194,24 @@ class App extends Component {
     if (this.state.showSubmit) {
       return (
       <div className="wrapper">
-        <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome}  />
+        <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} onAbout={this.state.showAbout}  />
         <Submit author={this.state.username}/>
+        <Footer />
+      </div>
+      )
+    }
+    if (this.state.showAbout) {
+      return (
+        <div className="wrapper">
+        <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} onAbout={this.state.showAbout}  />
+        <About />
         <Footer />
       </div>
       )
     }
     return(
     <div className="wrapper">
-      <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome}  />
+      <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} onAbout={this.state.showAbout}  />
       <Content Games={this.state.games}/>
       <Footer />
     </div>
@@ -219,6 +244,7 @@ class Navigation extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleAbout = this.handleAbout.bind(this);
   }
 
   handleHome() {
@@ -237,6 +263,10 @@ class Navigation extends Component {
     this.props.onNavigation("logout");
   }
 
+  handleAbout() {
+    this.props.onNavigation("about");
+  }
+
   render() {
     if (this.props.loggedIn) {
       if (this.props.onHome) {
@@ -248,6 +278,22 @@ class Navigation extends Component {
           <div id="links" className="links">
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
+            <a className="link" onClick={this.handleAbout}>About</a>
+            <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
+          </div>
+        </div>
+        )
+      }
+      if (this.props.onAbout) {
+        return (
+        <div id="nav" className="nav">
+          <div id="title" className="title">
+              Carrier Commander
+          </div>
+          <div id="links" className="links">
+            <a className="link" onClick={this.handleHome}>Home</a>
+            <a className="link" onClick={this.handleSubmit}>Submit</a>
+            <a className="link current" onClick={this.handleAbout}>About</a>
             <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
           </div>
         </div>
@@ -261,6 +307,7 @@ class Navigation extends Component {
         <div id="links" className="links">
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
+          <a className="link" onClick={this.handleAbout}>About</a>
           <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
         </div>
       </div>
@@ -275,9 +322,25 @@ class Navigation extends Component {
           <div id="links" className="links">
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
+            <a className="link" onClick={this.handleAbout}>About</a>
             <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
           </div>
         </div>
+      )
+    }
+    if (this.props.onAbout) {
+      return (
+      <div id="nav" className="nav">
+        <div id="title" className="title">
+            Carrier Commander
+        </div>
+        <div id="links" className="links">
+          <a className="link" onClick={this.handleHome}>Home</a>
+          <a className="link" onClick={this.handleSubmit}>Submit</a>
+          <a className="link current" onClick={this.handleAbout}>About</a>
+          <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
+        </div>
+      </div>
       )
     }
     return (
@@ -288,6 +351,7 @@ class Navigation extends Component {
         <div id="links" className="links">
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
+          <a className="link" onClick={this.handleAbout}>About</a>
           <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
         </div>
       </div>
@@ -492,9 +556,10 @@ class Game extends Component {
 class About extends Component {
   render() {
     return(
-      <div>
+      <div className="wrapper about">
         <h1>Carrier Commander</h1>
         <p><strong>This is a work in progress.</strong></p>
+        <p>I plan on adding a lot more features. If you're interested in helping please contact Tickle#0001 on Discord.</p>
       </div>
     )
   }
