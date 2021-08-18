@@ -580,11 +580,10 @@ class About extends Component {
         <p>I plan on adding a lot more features.</p>
         <h2>Road Map</h2>
         <ul>
-          <li>Individual pages for games with more information.</li>
-          <li>Ability to delete games after creation.</li>
+          <li>Individual pages for games with more information</li>
+          <li>Ability to delete games after creation</li>
           <li>Tournaments</li>
           <li>Etc</li>
-          <li></li>
         </ul>
       </div>
     )
