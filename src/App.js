@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import aws_exports from './aws-exports';
-import { AmplifyAuthContainer, AmplifyAuthenticator, AmplifySignIn } from "@aws-amplify/ui-react";
+import { AmplifyAuthContainer, AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from "@aws-amplify/ui-react";
 import appSyncConfig from "./aws-exports";
 import { API, graphqlOperation, Amplify, Auth, Hub, Logger } from 'aws-amplify';
 import { useEffect, useState } from 'react'
@@ -73,7 +73,7 @@ class App extends Component {
     API.graphql(graphqlOperation(listCarriedCommandGames))
     .then((result) => {
       this.setState({
-        games: result.data.listCarriedCommandGames.items
+        games: result.data.listCarriedCommandGames.items.sort((a, b) => new Date(b.created) - new Date(a.created))
       })
     })
     .catch((error) => {
@@ -123,7 +123,7 @@ class App extends Component {
       API.graphql(graphqlOperation(listCarriedCommandGames))
       .then((result) => {
         this.setState({
-          games: result.data.listCarriedCommandGames.items
+          games: result.data.listCarriedCommandGames.items.sort((a, b) => new Date(b.created) - new Date(a.created))
         })
       })
       .catch((error) => {
@@ -186,6 +186,16 @@ class App extends Component {
         <Navigation onNavigation={this.handleNavigation} loggedIn={this.state.loggedIn} username={this.state.username} onHome={this.state.onHome} onAbout={this.state.showAbout} />
         <AmplifyAuthenticator>
           <AmplifySignIn></AmplifySignIn>
+          <AmplifySignUp
+          slot="sign-up"
+          formFields={[
+            { type: "username" },
+            {
+              type: "password",
+            },
+            { type: "email" }
+          ]} 
+        ></AmplifySignUp>
         </AmplifyAuthenticator>
         <Footer /> 
       </div>
@@ -363,7 +373,7 @@ class GamesHeader extends Component {
   render () {
     return (
       <div className="left">
-          <h1>Open Games</h1>
+          <h1>Open Games (Last 3 Hours)</h1>
         </div>
     )
   }
@@ -375,11 +385,14 @@ class Games extends Component {
 
   createGame(game) {
     var now = new Date();
-    var converted = Date.parse(game.created);
-    var diffMs = (now - converted);
-    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
-    game.age = diffMins + "m";
-    return <Game title={game.title} author={game.author} code={game.code} password={game.password} title={game.title} players={game.players} reports={game.reports} age={game.age} />;
+    var converted = new Date(Date.parse(game.created));
+    var diffMins = Math.round(((now.getTime() - converted.getTime()) / 1000) / 60);
+    if (diffMins <= 1800) // 3 hours
+    {
+      game.age = diffMins + "m";
+      return <Game title={game.title} author={game.author} code={game.code} password={game.password} title={game.title} players={game.players} reports={game.reports} age={game.age} />;
+    
+    }
   }
 
   createGames(games) {
@@ -564,7 +577,15 @@ class About extends Component {
       <div className="wrapper about">
         <h1>Carrier Commander</h1>
         <p><strong>This is a work in progress.</strong></p>
-        <p>I plan on adding a lot more features. If you're interested in helping please contact Tickle#0001 on Discord.</p>
+        <p>I plan on adding a lot more features.</p>
+        <h2>Road Map</h2>
+        <ul>
+          <li>Individual pages for games with more information.</li>
+          <li>Ability to delete games after creation.</li>
+          <li>Tournaments</li>
+          <li>Etc</li>
+          <li></li>
+        </ul>
       </div>
     )
   }
