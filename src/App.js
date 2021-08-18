@@ -451,6 +451,8 @@ const Submit = ({author}) => {
   
   const [formState, setFormState] = useState([]);
 
+  formState.passedReCAPTCHA = false;
+
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value})
   }
@@ -468,6 +470,10 @@ const Submit = ({author}) => {
     if (!formState) {
       return false;
     }
+    if (!formState.passedReCAPTCHA) {
+      error("Please complete ReCAPTCHA.")
+      return false;
+    }
     if (!formState.title)
     {
       error("Please input a title.")
@@ -482,7 +488,7 @@ const Submit = ({author}) => {
   }
 
   function onReCAPTCHAChange(value) {
-    console.log(value);
+    formState.passedReCAPTCHA = true;
   }
 
   function addGame() {
@@ -495,7 +501,7 @@ const Submit = ({author}) => {
       formState.created = created.toISOString();
       formState.author = author ? author : "public";
       formState.reports = 0;
-      formState.id = author + Math.round((new Date()).getTime() / 1000);
+      formState.id = formState.author + Math.round((new Date()).getTime() / 1000);
       API.graphql(graphqlOperation(createCarriedCommandGames, { input: formState}))
       .then((result) => {
         window.location.reload(false);
@@ -564,6 +570,9 @@ class About extends Component {
           <li>Individual pages for games with more information</li>
           <li>Ability to delete games after creation</li>
           <li>Tournaments</li>
+          <li>Filters</li>
+          <li>More information about game (PvP vs PvE, # of island, etc)</li>
+          <li>Link to discord servers for voice chat</li>
           <li>Etc</li>
         </ul>
       </div>
