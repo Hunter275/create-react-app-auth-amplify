@@ -283,7 +283,6 @@ class Navigation extends Component {
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
             <a className="link" onClick={this.handleAbout}>About</a>
-            <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
           </div>
         </div>
         )
@@ -298,7 +297,6 @@ class Navigation extends Component {
             <a className="link" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
             <a className="link current" onClick={this.handleAbout}>About</a>
-            <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
           </div>
         </div>
         )
@@ -312,7 +310,6 @@ class Navigation extends Component {
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
           <a className="link" onClick={this.handleAbout}>About</a>
-          <a className="link" onClick={this.handleLogout}>{this.props.username},&nbsp;Sign&nbsp;Out</a>
         </div>
       </div>
       )
@@ -327,7 +324,6 @@ class Navigation extends Component {
             <a className="link current" onClick={this.handleHome}>Home</a>
             <a className="link" onClick={this.handleSubmit}>Submit</a>
             <a className="link" onClick={this.handleAbout}>About</a>
-            <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
           </div>
         </div>
       )
@@ -342,7 +338,6 @@ class Navigation extends Component {
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link" onClick={this.handleSubmit}>Submit</a>
           <a className="link current" onClick={this.handleAbout}>About</a>
-          <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
         </div>
       </div>
       )
@@ -356,7 +351,6 @@ class Navigation extends Component {
           <a className="link" onClick={this.handleHome}>Home</a>
           <a className="link current" onClick={this.handleSubmit}>Submit</a>
           <a className="link" onClick={this.handleAbout}>About</a>
-          <a className="link" onClick={this.handleLogin}>Sign&nbsp;In</a>
         </div>
       </div>
     )
