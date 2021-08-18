@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
-import aws_exports from './aws-exports';
-import { AmplifyAuthContainer, AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from "@aws-amplify/ui-react";
-import appSyncConfig from "./aws-exports";
-import { API, graphqlOperation, Amplify, Auth, Hub, Logger } from 'aws-amplify';
+import { AmplifyAuthenticator, AmplifySignIn, AmplifySignUp } from "@aws-amplify/ui-react";
+import { API, graphqlOperation, Amplify, Auth, Hub } from 'aws-amplify';
 import { useEffect, useState } from 'react'
 import { listCarriedCommandGames } from './graphql/queries'
 import { createCarriedCommandGames } from './graphql/mutations'
-import { DateUtils } from '@aws-amplify/core';
-import { AWSAppSyncProvider } from '@aws-amplify/pubsub';
-//mplify.configure(aws_exports);
 
 const config = {
   "aws_project_region": "us-east-2",
@@ -454,11 +448,11 @@ class Games extends Component {
 }
 
 const Submit = ({author}) => {
-  useEffect(() => {
-    if (!author) {
-      error("Please sign in or register.")
-    }
-  })
+  // useEffect(() => {
+  //   if (!author) {
+  //     error("Please sign in or register.")
+  //   }
+  // })
   
   const [formState, setFormState] = useState([]);
 
@@ -472,10 +466,10 @@ const Submit = ({author}) => {
   }
 
   function validate() {
-    if (!author) {
-      error("Please sign in or register.")
-      return false;
-    }
+    // if (!author) {
+    //   error("Please sign in or register.")
+    //   return false;
+    // }
     if (!formState) {
       return false;
     }
@@ -500,7 +494,7 @@ const Submit = ({author}) => {
       }
       var created = new Date;
       formState.created = created.toISOString();
-      formState.author = author;
+      formState.author = author ? author: public;
       formState.reports = 0;
       formState.id = author + Math.round((new Date()).getTime() / 1000);
       API.graphql(graphqlOperation(createCarriedCommandGames, { input: formState}))
@@ -528,15 +522,6 @@ const Submit = ({author}) => {
       <button className="submit-button" onClick={addGame}>Create Game</button>
     </div>
   )
-}
-
-class ErrorMessage extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return <span className="error">{this.props.error}</span>
-  }
 }
 
 class Game extends Component {
