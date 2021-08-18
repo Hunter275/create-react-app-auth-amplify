@@ -489,11 +489,6 @@ const Submit = ({author}) => {
       error("Please input a code.")
       return false;
     }
-    if (!formState.password)
-    {
-      error("Please input a password.")
-      return false;
-    }
     return true;
   }
 
