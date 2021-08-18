@@ -5,6 +5,7 @@ import { API, graphqlOperation, Amplify, Auth, Hub } from 'aws-amplify';
 import { useEffect, useState } from 'react'
 import { listCarriedCommandGames } from './graphql/queries'
 import { createCarriedCommandGames } from './graphql/mutations'
+import ReCAPTCHA from "react-google-recaptcha";
 
 const config = {
   "aws_project_region": "us-east-2",
@@ -480,6 +481,10 @@ const Submit = ({author}) => {
     return true;
   }
 
+  function onReCAPTCHAChange(value) {
+    console.log(value);
+  }
+
   function addGame() {
     if (validate())
     {
@@ -513,6 +518,8 @@ const Submit = ({author}) => {
       <label for="title">Players</label> <br />
       <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
       <span id="error" className="error"></span>
+      <ReCAPTCHA sitekey="6LeTJg0cAAAAAGcxjaPIkriuMj5SfMoC1I-OnFtL" onChange={onReCAPTCHAChange} />
+      <br/>
       <button className="submit-button" onClick={addGame}>Create Game</button>
     </div>
   )
