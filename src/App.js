@@ -523,7 +523,7 @@ const Submit = ({author}) => {
       <label for="title">Password</label> <br />
       <input className="game-input" type="text" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
       <label for="title">Players</label> <br />
-      <input className="game-input" type="number" max="16" min="2" value="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
+      <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
       <span id="error" className="error"></span>
       <button className="submit-button" onClick={addGame}>Create Game</button>
     </div>
