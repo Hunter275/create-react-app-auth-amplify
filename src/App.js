@@ -470,10 +470,10 @@ const Submit = ({author}) => {
     if (!formState) {
       return false;
     }
-    if (!formState.passedReCAPTCHA) {
-      error("Please complete ReCAPTCHA.")
-      return false;
-    }
+    // if (!formState.passedReCAPTCHA) {
+    //   error("Please complete ReCAPTCHA.")
+    //   return false;
+    // }
     if (!formState.title)
     {
       error("Please input a title.")
