@@ -451,7 +451,7 @@ const Submit = ({author}) => {
   
   const [formState, setFormState] = useState([]);
 
-  formState.passedReCAPTCHA = false;
+  //formState.passedReCAPTCHA = false;
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value})
@@ -488,7 +488,8 @@ const Submit = ({author}) => {
   }
 
   function onReCAPTCHAChange(value) {
-    formState.passedReCAPTCHA = true;
+    //formState.passedReCAPTCHA = true;
+    console.log("validated");
   }
 
   function addGame() {
