@@ -494,7 +494,7 @@ const Submit = ({author}) => {
       }
       var created = new Date;
       formState.created = created.toISOString();
-      formState.author = author ? author: public;
+      formState.author = author ? author : "public";
       formState.reports = 0;
       formState.id = author + Math.round((new Date()).getTime() / 1000);
       API.graphql(graphqlOperation(createCarriedCommandGames, { input: formState}))
