@@ -500,6 +500,7 @@ const Submit = ({author}) => {
       }
       var created = new Date;
       formState.created = created.toISOString();
+      formState.gamemode = "N/A";
       formState.author = author ? author : "public";
       formState.reports = 0;
       formState.id = formState.author + Math.round((new Date()).getTime() / 1000);
