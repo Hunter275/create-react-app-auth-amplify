@@ -376,7 +376,7 @@ class Games extends Component {
     var now = new Date();
     var converted = new Date(Date.parse(game.created));
     var diffMins = Math.round(((now.getTime() - converted.getTime()) / 1000) / 60);
-    if (diffMins <= 1800) // 3 hours
+    if (diffMins <= 180) // 3 hours
     {
       game.age = diffMins + "m";
       return <Game title={game.title} author={game.author} code={game.code} password={game.password} title={game.title} players={game.players} reports={game.reports} age={game.age} />;
