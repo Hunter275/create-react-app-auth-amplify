@@ -220,16 +220,16 @@ hr {
 }
 .game-title {
     display: inline-block;
-    padding-left: 5%;
-    width: 16%;
+    padding-left: 1%;
+    width: 20%;
 }
 .code {
     display: inline-block;
-    width: 25%;
+    width: 30%;
 }
 .password {
     display: inline-block;
-    width: 25%;
+    width: 30%;
 }
 .players {
     display: inline-block;
