@@ -379,7 +379,23 @@ class Games extends Component {
     if (diffMins <= 180) // 3 hours
     {
       game.age = diffMins + "m";
-      return <Game title={game.title} author={game.author} code={game.code} password={game.password} title={game.title} players={game.players} reports={game.reports} age={game.age} />;
+      return <Game 
+        title={game.title} 
+        author={game.author} 
+        code={game.code} 
+        password={game.password} 
+        title={game.title} 
+        players={game.players} 
+        reports={game.reports} 
+        age={game.age} 
+        gamemode={game.gamemode} 
+        humanteams={game.humanteams}
+        aiteams={game.aiteams}
+        basedifficulty={game.basedifficulty}
+        islands={game.islands}
+        loadout={game.loadout}
+        startingislands={game.startingislands}
+      />;
     
     }
   }
@@ -394,23 +410,6 @@ class Games extends Component {
       return (
         <div className="games">
           <GamesHeader />
-          <div className="game game-header">
-            <div className="game-title">
-              <strong>Match Title</strong>
-            </div>
-            <div className="players">
-              <strong>Players</strong>
-            </div>
-            <div className="code">
-              <strong>Invite Code</strong>
-            </div>
-            <div className="password">
-              <strong>Password</strong>
-            </div>
-            <div className="age">
-              <strong>Age</strong>
-            </div>
-          </div>
           {this.createGames(this.props.Games)}
         </div>
     )
@@ -470,7 +469,7 @@ const Submit = ({author}) => {
     if (!formState) {
       return false;
     }
-    // if (!formState.passedReCAPTCHA) {
+    // if (!passedReCAPTCHA) {
     //   error("Please complete ReCAPTCHA.")
     //   return false;
     // }
@@ -508,29 +507,80 @@ const Submit = ({author}) => {
       .then((result) => {
         window.location.reload(false);
       })
-      .catch((error) => {
-        console.log(error);
-        error("Error when posting game, are you logged in?");
+      .catch((er) => {
+        console.log(er);
+        //error("Error when posting game, are you logged in?");
       })
     }
   }
 
-  return (
-    <div className="submit">
-      <label for="title">Title</label> <br />
-      <input className="game-input" type="text" id="title" className="game-input" onChange={event => setInput('title', event.target.value)}></input>
-      <label for="title">Invite Code</label> <br />
-      <input className="game-input" type="text" id="code" className="game-input" onChange={event => setInput('code', event.target.value)}></input>
-      <label for="title">Password</label> <br />
-      <input className="game-input" type="text" id="password" className="game-input" onChange={event => setInput('password', event.target.value)}></input>
-      <label for="title">Players</label> <br />
-      <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" className="game-input" onChange={event => setInput('players', event.target.value)}></input>
-      <span id="error" className="error"></span>
-      <ReCAPTCHA sitekey="6LeTJg0cAAAAAGcxjaPIkriuMj5SfMoC1I-OnFtL" onChange={onReCAPTCHAChange} />
-      <br/>
-      <button className="submit-button" onClick={addGame}>Create Game</button>
-    </div>
-  )
+  if (formState.gamemode == "Campaign" || formState.gamemode == null)
+  {
+    return (
+      <div className="submit">
+        <label for="title">Title<span className="red">*</span></label> <br />
+        <input className="game-input" type="text" id="title" onChange={event => setInput('title', event.target.value)}></input>
+        <label for="gamemode">Game Mode<span className="red">*</span></label>
+        <select className="game-input" onChange={event => setInput('gamemode', event.target.value)}>
+          <option value="Campaign">Campaign</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <label for="title">Players<span className="red">*</span></label> <br />
+        <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" onChange={event => setInput('players', event.target.value)}></input>
+        <label for="title">Invite Code<span className="red">*</span></label> <br />
+        <input className="game-input" type="text" id="code" onChange={event => setInput('code', event.target.value)}></input>
+        <label for="title">Password</label> <br />
+        <input className="game-input" type="text" id="password" onChange={event => setInput('password', event.target.value)}></input>
+        <label for="title">Description</label>
+        <textarea></textarea>
+        <span id="error" className="error"></span>
+        <ReCAPTCHA sitekey="6LeTJg0cAAAAAGcxjaPIkriuMj5SfMoC1I-OnFtL" onChange={onReCAPTCHAChange} />
+        <br/>
+        <button className="submit-button" onClick={addGame}>Create Game</button>
+      </div>
+    )
+  }
+  else {
+    return (
+      <div className="submit">
+        <label for="title">Title<span className="red">*</span></label> <br />
+        <input className="game-input" type="text" id="title" onChange={event => setInput('title', event.target.value)}></input>
+        <label for="gamemode">Game Mode<span className="red">*</span></label>
+        <select className="game-input" onChange={event => setInput('gamemode', event.target.value)}>
+          <option value="Campaign">Campaign</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <label for="title">Players<span className="red">*</span></label> <br />
+        <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" onChange={event => setInput('players', event.target.value)}></input>
+        <label for="title">Invite Code<span className="red">*</span></label> <br />
+        <input className="game-input" type="text" id="code" onChange={event => setInput('code', event.target.value)}></input>
+        <label for="title">Password</label> <br />
+        <input className="game-input" type="text" id="password" onChange={event => setInput('password', event.target.value)}></input>
+        <label for="title">Islands<span className="red">*</span></label>
+        <input className="game-input" type="number" max="64" min="4" placeholder="4" name="islands" id="islands" onChange={event => setInput('islands', event.target.value)}></input>
+        <label for="title">Human Teams<span className="red">*</span></label>
+        <input className="game-input" type="number" max="4" min="1" placeholder="1" name="humanteams" id="humanteams" onChange={event => setInput('humanteams', event.target.value)}></input>
+        <label for="title">AI Teams<span className="red">*</span></label>
+        <input className="game-input" type="number" max="4" min="0" placeholder="0" name="aiteams" id="aiteams" onChange={event => setInput('aiteams', event.target.value)}></input>
+        <label for="title">Starting Islands<span className="red">*</span></label>
+        <input className="game-input" type="number" max="64" min="1" placeholder="1" name="startingislands" id="startingislands" onChange={event => setInput('startingislands', event.target.value)}></input>
+        <label for="title">Base Difficulty<span className="red">*</span></label>
+        <input className="game-input" type="number" max="4" min="1" placeholder="1" name="basedifficulty" id="basedifficulty" onChange={event => setInput('basedifficulty', event.target.value)}></input>
+        <label for="title">Loadout<span className="red">*</span></label>
+        <select className="game-input" onChange={event => setInput('loadout', event.target.value)}>
+          <option value="Default">Default</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Expert">Expert</option>
+        </select>
+        <label for="title">Description</label>
+        <textarea onChange={event => setInput('description', event.target.value)}></textarea>
+        <span id="error" className="error"></span>
+        <ReCAPTCHA sitekey="6LeTJg0cAAAAAGcxjaPIkriuMj5SfMoC1I-OnFtL" onChange={onReCAPTCHAChange} />
+        <br/>
+        <button className="submit-button" onClick={addGame}>Create Game</button>
+      </div>
+    )
+  }
 }
 
 class Game extends Component {
@@ -540,22 +590,47 @@ class Game extends Component {
   render() {
     return(
       <div className="game">
-            <div className="game-title">
-            {this.props.title}
-            </div>
-            <div className="players">
-            {this.props.players}
-            </div>
-            <div className="code">
-            {this.props.code}
-            </div>
-            <div className="password">
-            {this.props.password}
-            </div>
-            <div className="age">
-            {this.props.age}
-            </div>
+        <div className="game-top">
+          <div className="game-mode">
+          {this.props.gamemode}
           </div>
+          <div className="game-title">
+          {this.props.title}
+          </div>
+          <div className="players">
+          <strong>Players:</strong>&nbsp;{this.props.players}
+          </div>
+          <div className="players">
+          <strong>Human&nbsp;Teams:</strong>&nbsp;{this.props.humanteams ? this.props.humanteams : "N/A"}
+          </div>
+          <div className="players">
+          <strong>AI&nbsp;Teams:</strong>&nbsp;{this.props.aiteams ? this.props.aiteams : "N/A"}
+          </div>
+          <div className="players">
+          <strong>Islands:</strong>&nbsp;{this.props.islands ? this.props.islands : "N/A"}
+          </div>
+          <div className="players">
+          <strong>Starting&nbsp;Islands:</strong>&nbsp;{this.props.startingislands ? this.props.startingislands : "N/A"}
+          </div>
+          <div className="players">
+          <strong>Loadout:</strong>&nbsp;{this.props.loadout ? this.props.loadout : "N/A"}
+          </div>
+          <div className="difficulty">
+          <strong>Difficulty:</strong>&nbsp;{this.props.basedifficulty ? this.props.basedifficulty : "N/A"}
+          </div>
+          <div className="age">
+          Age:&nbsp;{this.props.age}
+          </div>
+        </div>
+        <div className="game-bottom">
+          <div className="code">
+          Multiplayer&nbsp;Code: {this.props.code}
+          </div>
+          <div className="password">
+          Password:&nbsp;{this.props.password}
+          </div>
+        </div>
+      </div>
     )
   }
 }

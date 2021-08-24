@@ -47,6 +47,14 @@ export const getCarriedCommandGames = /* GraphQL */ `
       players
       reports
       created
+      gamemode
+      islands
+      humanteams
+      aiteams
+      startingislands
+      basedifficulty
+      loadout
+      description
     }
   }
 `;
@@ -70,6 +78,14 @@ export const listCarriedCommandGames = /* GraphQL */ `
         players
         reports
         created
+        gamemode
+        islands
+        humanteams
+        aiteams
+        startingislands
+        basedifficulty
+        loadout
+        description
       }
       nextToken
     }
