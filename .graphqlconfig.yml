@@ -1,6 +1,6 @@
 projects:
-  CCAPIv3:
-    schemaPath: src/graphql/schema.json
+  Codegen Project:
+    schemaPath: schema.json
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -10,8 +10,10 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-        region: us-east-2
+        region: us-east-1
         apiId: ssnx5t2ngjgwxfl2n335ua3eue
+        frontend: javascript
+        framework: react
         maxDepth: 2
 extensions:
   amplify:

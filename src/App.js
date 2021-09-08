@@ -450,7 +450,7 @@ const Submit = ({author}) => {
   
   const [formState, setFormState] = useState([]);
 
-  //formState.passedReCAPTCHA = false;
+  var passedReCAPTCHA = false;
 
   function setInput(key, value) {
     setFormState({ ...formState, [key]: value})
@@ -469,10 +469,10 @@ const Submit = ({author}) => {
     if (!formState) {
       return false;
     }
-    // if (!passedReCAPTCHA) {
-    //   error("Please complete ReCAPTCHA.")
-    //   return false;
-    // }
+    if (!passedReCAPTCHA) {
+      error("Please complete ReCAPTCHA.")
+      return false;
+    }
     if (!formState.title)
     {
       error("Please input a title.")
@@ -486,9 +486,8 @@ const Submit = ({author}) => {
     return true;
   }
 
-  function onReCAPTCHAChange(value) {
-    //formState.passedReCAPTCHA = true;
-    console.log("validated");
+  function onReCAPTCHAChange() {
+    passedReCAPTCHA = true;
   }
 
   function addGame() {
@@ -497,9 +496,12 @@ const Submit = ({author}) => {
       if (!formState.players) {
         formState.players = 2;
       }
+      if (!formState.gamemode)
+      {
+        formState.gamemode = "Campaign";
+      }
       var created = new Date;
       formState.created = created.toISOString();
-      formState.gamemode = "N/A";
       formState.author = author ? author : "public";
       formState.reports = 0;
       formState.id = formState.author + Math.round((new Date()).getTime() / 1000);
@@ -509,7 +511,6 @@ const Submit = ({author}) => {
       })
       .catch((er) => {
         console.log(er);
-        //error("Error when posting game, are you logged in?");
       })
     }
   }
@@ -528,11 +529,11 @@ const Submit = ({author}) => {
         <label for="title">Players<span className="red">*</span></label> <br />
         <input className="game-input" type="number" max="16" min="2" placeholder="2" name="title" id="players" onChange={event => setInput('players', event.target.value)}></input>
         <label for="title">Invite Code<span className="red">*</span></label> <br />
-        <input className="game-input" type="text" id="code" onChange={event => setInput('code', event.target.value)}></input>
+        <input className="game-input" type="text" placeholder="Invite Code" id="code" onChange={event => setInput('code', event.target.value)}></input>
         <label for="title">Password</label> <br />
-        <input className="game-input" type="text" id="password" onChange={event => setInput('password', event.target.value)}></input>
+        <input className="game-input" type="text" id="password" placeholder="Leave blank if no password" onChange={event => setInput('password', event.target.value)}></input>
         <label for="title">Description</label>
-        <textarea></textarea>
+        <textarea onChange={event => setInput('description', event.target.value)}></textarea>
         <span id="error" className="error"></span>
         <ReCAPTCHA sitekey="6LeTJg0cAAAAAGcxjaPIkriuMj5SfMoC1I-OnFtL" onChange={onReCAPTCHAChange} />
         <br/>
@@ -588,50 +589,75 @@ class Game extends Component {
     super(props);
   }
   render() {
-    return(
-      <div className="game">
-        <div className="game-top">
-          <div className="game-mode">
-          {this.props.gamemode}
+    if (this.props.gamemode == "Custom" || true)
+    {
+      return(
+        <div className="game">
+          <div className="game-top">
+            <div className="game-mode">
+            {this.props.gamemode}
+            </div>
+            <div className="game-title">
+            {this.props.title}
+            </div>
+            <div className="players">
+            <strong>Players:</strong>&nbsp;{this.props.players}
+            </div>
+            <div className="players">
+            <strong>Human&nbsp;Teams:</strong>&nbsp;{this.props.humanteams ? this.props.humanteams : "N/A"}
+            </div>
+            <div className="players">
+            <strong>AI&nbsp;Teams:</strong>&nbsp;{this.props.aiteams ? this.props.aiteams : "N/A"}
+            </div>
+            <div className="players">
+            <strong>Islands:</strong>&nbsp;{this.props.islands ? this.props.islands : "N/A"}
+            </div>
+            <div className="difficulty">
+            <strong>Difficulty:</strong>&nbsp;{this.props.basedifficulty ? this.props.basedifficulty : "N/A"}
+            </div>
+            <div className="age">
+            Age:&nbsp;{this.props.age}
+            </div>
           </div>
-          <div className="game-title">
-          {this.props.title}
-          </div>
-          <div className="players">
-          <strong>Players:</strong>&nbsp;{this.props.players}
-          </div>
-          <div className="players">
-          <strong>Human&nbsp;Teams:</strong>&nbsp;{this.props.humanteams ? this.props.humanteams : "N/A"}
-          </div>
-          <div className="players">
-          <strong>AI&nbsp;Teams:</strong>&nbsp;{this.props.aiteams ? this.props.aiteams : "N/A"}
-          </div>
-          <div className="players">
-          <strong>Islands:</strong>&nbsp;{this.props.islands ? this.props.islands : "N/A"}
-          </div>
-          <div className="players">
-          <strong>Starting&nbsp;Islands:</strong>&nbsp;{this.props.startingislands ? this.props.startingislands : "N/A"}
-          </div>
-          <div className="players">
-          <strong>Loadout:</strong>&nbsp;{this.props.loadout ? this.props.loadout : "N/A"}
-          </div>
-          <div className="difficulty">
-          <strong>Difficulty:</strong>&nbsp;{this.props.basedifficulty ? this.props.basedifficulty : "N/A"}
-          </div>
-          <div className="age">
-          Age:&nbsp;{this.props.age}
-          </div>
-        </div>
-        <div className="game-bottom">
-          <div className="code">
-          Multiplayer&nbsp;Code: {this.props.code}
-          </div>
-          <div className="password">
-          Password:&nbsp;{this.props.password}
+          <div className="game-bottom">
+            <div className="code">
+            {this.props.code}
+            </div>
+            <div className="password">
+            Password:&nbsp;{this.props.password}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
+    else {
+      return(
+        <div className="game">
+          <div className="game-top">
+            <div className="game-mode">
+            {this.props.gamemode}
+            </div>
+            <div className="game-title">
+            {this.props.title}
+            </div>
+            <div className="players">
+            <strong>Players:</strong>&nbsp;{this.props.players}
+            </div>
+            <div className="age">
+            Age:&nbsp;{this.props.age}
+            </div>
+          </div>
+          <div className="game-bottom">
+            <div className="code">
+            {this.props.code}
+            </div>
+            <div className="password">
+            Password:&nbsp;{this.props.password}
+            </div>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
