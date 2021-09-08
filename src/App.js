@@ -589,7 +589,7 @@ class Game extends Component {
     super(props);
   }
   render() {
-    if (this.props.gamemode == "Custom" || true)
+    if (this.props.gamemode == "Custom")
     {
       return(
         <div className="game">
