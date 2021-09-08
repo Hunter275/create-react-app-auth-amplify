@@ -373,7 +373,10 @@ class Games extends Component {
   }
 
   createGame(game) {
-    var now = new Date();
+    var date = new Date(); 
+    var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    var now = Date(now_utc);
     var converted = new Date(Date.parse(game.created));
     var diffMins = Math.round(((now.getTime() - converted.getTime()) / 1000) / 60);
     if (diffMins <= 180) // 3 hours
@@ -500,7 +503,11 @@ const Submit = ({author}) => {
       {
         formState.gamemode = "Campaign";
       }
-      var created = new Date;
+      var date = new Date(); 
+      var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+      date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+      var created = new Date(now_utc);
       formState.created = created.toISOString();
       formState.author = author ? author : "public";
       formState.reports = 0;
